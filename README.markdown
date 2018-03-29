@@ -3,57 +3,34 @@ Applicants for the [Software developer](https://wave.bamboohr.co.uk/jobs/view.ph
 
 The purpose of this exercise is to create something that we can work on together during the onsite. We do this so that you get a chance to collaborate with Wavers during the interview in a situation where you know something better than us (it's your code, after all!) 
 
-There isn't a hard deadline for this exercise; take as long as you need to complete it. However, in terms of total time spent actively working on the challenge, we ask that you not spend more than a few hours, as we value your time and are happy to leave things open to discussion in the onsite interview.
+... see [original readme description](https://github.com/wvchallenges/se-challenge-expenses) here.
 
-Please use whatever programming language and framework you feel the most comfortable with.
+## Requirements Summary:
+* Upload this [CSV](https://github.com/wvchallenges/se-challenge-expenses/blob/master/data_example.csv) file via form entry.
+* Persist to a relational database.
+* Display per-month total of one of the fields.
+* Easy to setup application.
 
-Feel free to email [dev.careers@waveapps.com](dev.careers@waveapps.com) if you have any questions.
-
-## Project Description
-Imagine that Wave has just acquired a new company. Unfortunately, the company has never stored their data in a database, and instead uses a comma separated text file. We need to create a way for the new subsidiary to import their data into a database. Your task is to create a web interface that accepts file uploads, and then stores them in a relational database.
-
-### What your web-based application must do:
-
-1. Your app must accept (via a form) a comma separated file with the following columns: date, category, employee name, employee address, expense description, pre-tax amount, tax name, and tax amount.
-1. You can make the following assumptions:
- 1. Columns will always be in that order.
- 2. There will always be data in each column.
- 3. There will always be a header line.
-
- An example input file named `data_example.csv` is included in this repo.
-
-1. Your app must parse the given file, and store the information in a relational database.
-1. After upload, your application should display a table of the total expenses amount per-month represented by the uploaded file.
-
-Your application should be easy to set up, and should run on either Linux or Mac OS X. It should not require any non open-source software.
-
-There are many ways that this application could be built; we ask that you build it in a way that showcases one of your strengths. If you you enjoy front-end development, do something interesting with the interface. If you like object-oriented design, feel free to dive deeper into the domain model of this problem. We're happy to tweak the requirements slightly if it helps you show off one of your strengths.
-
-### Documentation:
-
-Please modify `README.md` to add:
-
-1. Instructions on how to build/run your application
-1. A paragraph or two about what you are particularly proud of in your implementation, and why.
-
-## Submission Instructions
-
-1. Fork this project on github. You will need to create an account if you don't already have one.
-1. Complete the project as described below within your fork.
-1. Push all of your changes to your fork on github and submit a pull request. 
-1. You should also email [dev.careers@waveapps.com](dev.careers@waveapps.com) and your recruiter to let them know you have submitted a solution. Make sure to include your github username in your email (so we can match applicants with pull requests.)
-
-## Alternate Submission Instructions (if you don't want to publicize completing the challenge)
-1. Clone the repository.
-1. Complete your project as described below within your local repository.
-1. Email a patch file to [dev.careers@waveapps.com](dev.careers@waveapps.com)
-
-## Evaluation
-Evaluation of your submission will be based on the following criteria. 
-
-1. Did you follow the instructions for submission? 
-1. Did you document your build/deploy instructions and your explanation of what you did well?
-1. Were models/entities and other components easily identifiable to the reviewer? 
+## Evaluation:
+1. Were models/entities and other components easily identifiable to the reviewer?
 1. What design decisions did you make when designing your models/entities? Why (i.e. were they explained?)
 1. Did you separate any concerns in your application? Why or why not?
-1. Does your solution use appropriate datatypes for the problem as described? 
+1. Does your solution use appropriate datatypes for the problem as described?
+
+
+## Target Evolving Answers
+1. Having chosen to implement this in Nodejs despite a Java background, the nature of nested JavasScript function calls when designing the MVP seems quite flat & non-modular to me. For example nesting validation logic inside the middleware callback, or having all possible HTTP Request endpoints in one file seems unusual to me. *TBD: I'd like to revisit to attempt a greater logical separation, such as with `module.exports`. Initially I'll begin with a single `index.js` file to centralize in, expand into additional modules when passing by*.
+1. Employees & Expenses seem like a very logical initial separation, followed by some higher level abstraction such as Reports. Since monthly totals could potentially always be recalculated, it could be argued as unnecessary to persist those results, however performance at scale would benefit from storing those results. *TBD: I want to establish a basic relationship with unique identifiers such as auto-incrementing integers, so an expense must reference an existing employee.*
+    1. **a design decision regarding business logic, but not regarding models/entities themselves**: Initially the front-end will handle HTTP requests from the simple yet limiting `<form method="POST" ..>` instead of using the more versatile `XMLHttpRequest` object in dozens of lines of code. *TBD: Ideally I'd like to work past the limited requirements of merely displaying the results of the expenses uploaded, by providing in-page editing directly, per-expense. In which case, it would permit a wider Restful API of full CRUD, supporting GET POST PUT and DELETE.*
+1. *TBD*
+1. Absolutely!
+
+
+## Lessons Learned
+### JavaScript
+* Initially I began with assumptions of JavaScript I didn't realize I had, until I began trying to treat it in familar ways like Java. For example I assumed variable references would *pass by reference*, which is typically not the case. However I've learned I can achieve that affect with arrays [here](https://stackoverflow.com/questions/5865094/how-can-i-store-reference-to-a-variable-within-an-array), so I intend to leverage that in my designs.
+* *TBD: Perhaps discuss implementation equivalent of a static variable counter from Java as applied in a JavaScript context, such as mentioned [here](https://stackoverflow.com/questions/1535631/static-variables-in-javascript). However I've realized I don't need to initialize it in the application layer, that solely the database should be responsible for generating unique IDs, so I may just discard this section.*
+
+### Node
+* *TBD: Possibly discuss any of: package management (?), any libraries (?), any IDE-specific things (like Webstorm's Typescript Language Service) (?), any general TypeScript-specific things (like needing a matching `@types/libxyz` version to your library) (?).*
+
