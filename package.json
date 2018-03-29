@@ -1,0 +1,19 @@
+{
+  "name": "wvchallenge-nodejs",
+  "version": "1.0.0",
+  "description": "Wave challenge application written in Nodejs base.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nastajus/wvchallenge-nodejs.git"
+  },
+  "author": "Ian Nastajus <ian.nastajus@gmail.com> (http://nastajus.com/)",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nastajus/wvchallenge-nodejs/issues"
+  },
+  "homepage": "https://github.com/nastajus/wvchallenge-nodejs#readme"
+}
