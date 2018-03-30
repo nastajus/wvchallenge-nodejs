@@ -23,12 +23,19 @@ app.get('/', function (req, res) {
 });
 
 app.post('/test', function (req, res) {
-	console.log(req.fields); // contains non-file fields
-	console.log(req.files); // contains files
 
 	let data = fs.readFileSync(req.files.expenseFile.path, { encoding : 'utf8'});
 	let expenseItemsFile = csvjson.toObject(data, { delimiter: ',', quote: '"' });
-	console.log(expenseItemsFile);
+
+	let logger = {
+		event: "file upload",
+		date: new Date(Date.now()).toLocaleString(),
+		size: req.files.expenseFile.size,
+		type: req.files.expenseFile.type,
+		name: req.files.expenseFile.name
+	}
+	console.log(JSON.stringify(logger).replace(/\"([^(\")"]+)\":/g,"$1:"));   //This will remove all the quotes around properties.
+
 
 	res.send('test response');
 });
