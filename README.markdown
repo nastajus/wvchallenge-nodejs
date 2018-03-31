@@ -34,3 +34,7 @@ The purpose of this exercise is to create something that we can work on together
 ### Node
 * *TBD: Possibly discuss any of: package management (?), any libraries (?), any IDE-specific things (like Webstorm's Typescript Language Service) (?), any general TypeScript-specific things (like needing a matching `@types/libxyz` version to your library) (?).*
 
+## Standards Applied
+* Considered using **[chaining](https://schier.co/blog/2013/11/14/method-chaining-in-javascript.html)**, but decided to design for now using a single method `Loggable.print()` over chaining multiple smaller methods, as advised by the [rule of threes](https://en.wikipedia.org/wiki/Rule_of_three_(computer_programming)) and to keep as lightweight as possible for reading.
+* *TBD: Verify convention of capitalization of constants [here](https://en.wikipedia.org/wiki/Naming_convention_(programming)#JavaScript).*
+* *TBD: Applied convention that when constructing instances of objects with `new` the function should be named beginning with a capital letter.*

@@ -7,6 +7,7 @@ const mkdirp = require('mkdirp');
 const fs = require('fs');
 const csvjson = require('csvjson');
 
+const Loggable = require('./Loggable');
 const app = express();
 
 //ensures empty folder `upload` exists without fuss.
@@ -27,15 +28,19 @@ app.post('/test', function (req, res) {
 	let data = fs.readFileSync(req.files.expenseFile.path, { encoding : 'utf8'});
 	let expenseItemsFile = csvjson.toObject(data, { delimiter: ',', quote: '"' });
 
-	let logger = {
+	let log = new Loggable( {
 		event: "file upload",
-		date: new Date(Date.now()).toLocaleString(),
+		//date: new Date(Date.now()).toLocaleString(),
 		size: req.files.expenseFile.size,
 		type: req.files.expenseFile.type,
 		name: req.files.expenseFile.name
-	}
-	console.log(JSON.stringify(logger).replace(/\"([^(\")"]+)\":/g,"$1:"));   //This will remove all the quotes around properties.
+	});
 
+
+	log.printA();
+	log.printB();
+	log.printC();
+	log.printD();
 
 	res.send('test response');
 });
