@@ -30,17 +30,13 @@ app.post('/test', function (req, res) {
 
 	let log = new Loggable( {
 		event: "file upload",
-		//date: new Date(Date.now()).toLocaleString(),
 		size: req.files.expenseFile.size,
 		type: req.files.expenseFile.type,
-		name: req.files.expenseFile.name
+		originalName: req.files.expenseFile.name,
+		uploadedName: req.files.expenseFile.path.split(path.sep).pop()
 	});
 
-
-	log.printA();
-	log.printB();
-	log.printC();
-	log.printD();
+	log.print();
 
 	res.send('test response');
 });

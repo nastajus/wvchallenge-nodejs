@@ -35,6 +35,11 @@ The purpose of this exercise is to create something that we can work on together
 * *TBD: Possibly discuss any of: package management (?), any libraries (?), any IDE-specific things (like Webstorm's Typescript Language Service) (?), any general TypeScript-specific things (like needing a matching `@types/libxyz` version to your library) (?).*
 
 ## Standards Applied
+### JavaScript
 * Considered using **[chaining](https://schier.co/blog/2013/11/14/method-chaining-in-javascript.html)**, but decided to design for now using a single method `Loggable.print()` over chaining multiple smaller methods, as advised by the [rule of threes](https://en.wikipedia.org/wiki/Rule_of_three_(computer_programming)) and to keep as lightweight as possible for reading.
 * *TBD: Verify convention of capitalization of constants [here](https://en.wikipedia.org/wiki/Naming_convention_(programming)#JavaScript).*
 * *TBD: Applied convention that when constructing instances of objects with `new` the function should be named beginning with a capital letter.*
+* *TBD: Applied correct standard of adding properties to object by iterating and checking for `hasOwnProperty` as shown [here](https://stackoverflow.com/questions/500504/why-is-using-for-in-with-array-iteration-a-bad-idea/4261096#4261096).*
+
+### Design
+* *TBD: Chose to use node library `mkdirp` to make empty folders like `/uploads`, `/logs`, instead of providing configuration instructions to create empty folders, to avoid imposing effort expended at configuring setup, at the cost of including yet another library which might potentiall interfere later. Absence of these empty folders throws an exception otherwise. If Git permitted storing empty folders I would rely on that instead.*
