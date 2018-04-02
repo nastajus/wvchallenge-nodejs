@@ -13,9 +13,10 @@ The purpose of this exercise is to create something that we can work on together
     * `CREATE DATABASE nastajus_wvchallenge_db;`
     * `CREATE USER 'nastajus_wvchallenge_user'@'localhost' IDENTIFIED BY 'nastajus_wvchallenge_pass';`
     * `GRANT ALL PRIVILEGES ON *.* TO 'nastajus_wvchallenge_user'@'localhost' WITH GRANT OPTION;`
-1. test db connection
-    * running index.js without error would prove it
-
+    * test db connection
+    * running `index.js` without error proves connects
+1. run sequelize migration
+    * `node_modules/.bin/sequelize db:migrate`
 
 ## Requirements Summary:
 * Upload this [CSV](https://github.com/wvchallenges/se-challenge-expenses/blob/master/data_example.csv) file via form entry.
