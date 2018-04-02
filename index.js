@@ -69,27 +69,26 @@ app.post('/test', function (req, res) {
 	expenseItemsFile.forEach(function(expenseFileEntry) {
 
 		Employee
-			.build({
+			.create({
 				name: expenseFileEntry['employee name'],
 				address: expenseFileEntry['employee address'] })
-			.save()
 			.catch(error => console.error(error))
+			.then(result => {return result.get()})
 			.then(result => {
-			});
 
 		Expense
-			.build({
+			.create({
 				//TODO: doesn't catch invalid column names, find way to enable. I shouldn't be able to submit `id` without warning or error message, but can submit anything and it ignores it.
 				//TODO: testing indicates database itself just drops or rounds the last digit when say 0.123 is used. I'd prefer a warning or error message at run-time within JavaScript, and the ability to explicitly set the currency to (13,2) within JavaScript
-				empId: 1,
+				empId: result.empId,
 				date: expenseFileEntry['date'],
 				category: expenseFileEntry['category'],
 				expDescription: expenseFileEntry['expense description'],
 				preTaxAmount: expenseFileEntry['pre-tax amount'].replace(',', ''),
 				taxName: expenseFileEntry['tax name'],
 				taxAmount: expenseFileEntry['tax amount'].replace(',', ''),
-			}).save()
-			.catch(error => console.error(error));
+			}).catch(error => console.error(error))
+		});
 	});
 
 /*
