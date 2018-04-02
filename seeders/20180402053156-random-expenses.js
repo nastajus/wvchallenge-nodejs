@@ -18,6 +18,8 @@ for (var i = 0; i < 20; i++) {
 	expense.date = new Date(dateParts[2], dateParts[1] - 1, dateParts[0]);
 	// if (expense.date === undefined || expense.date === null)
 	// 	throw new Error({'hehe':'haha'});
+
+	expense.taxName = "HST Sales tax";
 	mockModel.expenses.push(expense);
     console.log(expense.date)
 }

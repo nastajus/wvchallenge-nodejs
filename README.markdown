@@ -79,6 +79,7 @@ Everything below this point is extraneous details beyond the requirements specif
 ### JavaScript
 * Initially I began with assumptions of JavaScript I didn't realize I had, until I began trying to treat it in familar ways like Java. For example I assumed variable references would *pass by reference*, which is typically not the case. However I've learned I can achieve that affect with arrays [here](https://stackoverflow.com/questions/5865094/how-can-i-store-reference-to-a-variable-within-an-array), so I intend to leverage that in my designs.
 * *TBD: Perhaps discuss implementation equivalent of a static variable counter from Java as applied in a JavaScript context, such as mentioned [here](https://stackoverflow.com/questions/1535631/static-variables-in-javascript). However I've realized I don't need to initialize it in the application layer, that solely the database should be responsible for generating unique IDs, so I may just discard this section.*
+* *TBD: Padding trick with `.slice( negative )` [here](http://www.codigomanso.com/en/2010/07/simple-javascript-formatting-zero-padding/).*
 
 ### Node
 * *TBD: Possibly discuss any of: package management (?), any libraries (?), any IDE-specific things (like Webstorm's Typescript Language Service) (?), any general TypeScript-specific things (like needing a matching `@types/libxyz` version to your library) (?).*

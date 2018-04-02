@@ -18,7 +18,8 @@ const DATABASE_DIALECT = 'mysql';
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize(DATABASE_NAME, 'nastajus_wvchallenge_user', 'nastajus_wvchallenge_pass', {
 	host: 'localhost',
-	dialect: DATABASE_DIALECT
+	dialect: DATABASE_DIALECT,
+	//logging: {new Loggable(msg)}      vs.     logging: myLogFunc      with        var myLogFunc = function(msg) {}
 });
 
 sequelize.authenticate()
@@ -29,6 +30,7 @@ sequelize.authenticate()
 	});
 
 const Employee = sequelize.import(__dirname + "/models/employee");
+const Expense = sequelize.import(__dirname + "/models/expense");
 
 
 // web app setup
@@ -64,7 +66,37 @@ app.post('/test', function (req, res) {
 
 
 	expenseItemsFile.forEach(function(expenseFileEntry) {
-		Employee.build({name: expenseFileEntry['employee name'], address: expenseFileEntry['employee address'] }).save().catch(error => { /*oops*/ });
+
+		Expense
+			.build({
+				id: 1,//result.empId,
+				date: expenseFileEntry['date'],
+				category: expenseFileEntry['category'],
+				expDescription: expenseFileEntry['expense description'],
+				// preTaxAmount: expenseFileEntry['pre-tax amount'],
+				taxName: expenseFileEntry['tax name'],
+				// taxAmount: expenseFileEntry['tax amount'],
+			}).save()
+			.catch(error => {
+				console.error(error);
+				// if (error instanceof sequelize.ForeignKeyConstraintError) {
+				// 	// handle foreign key constraint
+				// } else {
+				// 	// handle other error
+				// }
+			});
+
+/*
+		Employee
+			.build({
+				name: expenseFileEntry['employee name'],
+				address: expenseFileEntry['employee address'] })
+			.save()
+
+			.then(result => {
+			});
+*/
+
 	});
 
 /*

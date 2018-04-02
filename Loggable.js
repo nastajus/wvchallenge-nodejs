@@ -29,12 +29,12 @@ Loggable.prototype.print = function () {
 
 function getDateFormatYMDHM() {
 	let d = new Date(Date.now());
-	return d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate() + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+	return d.getFullYear() + "-" + padLeft((d.getMonth()+1), "0") + "-" + padLeft(d.getDate(), "0") + " " + d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
 }
 
 function getDateFormatYMD() {
 	let d = new Date(Date.now());
-	return d.getFullYear() + "-" + (d.getMonth()+1) + "-" + d.getDate();
+	return d.getFullYear() + "-" + padLeft((d.getMonth()+1), "0") + "-" + padLeft(d.getDate(), "0");
 }
 
 function addProperties(objSource, objTarget) {
@@ -47,5 +47,8 @@ function addProperties(objSource, objTarget) {
 	return objTarget;
 }
 
+function padLeft(str, padding){
+	return (padding + str).slice(-(padding.length+1));
+}
 
 module.exports = Loggable;
