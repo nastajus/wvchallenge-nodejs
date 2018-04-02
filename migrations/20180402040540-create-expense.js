@@ -20,19 +20,19 @@ module.exports = {
       expDescription: {
         type: Sequelize.STRING
       },
-      // preTaxAmount: {
-	   //    type: Sequelize.DECIMAL(13, 2),
-	   //    // precision: 13,
-	   //    // scale: 2
-      // },
+      preTaxAmount: {
+	      type: Sequelize.DECIMAL(13, 2),
+	      // precision: 13,
+	      // scale: 2
+      },
       taxName: {
         type: Sequelize.STRING
       },
-      // taxAmount: {
-      //   type: Sequelize.DECIMAL(13, 2),
-      //   // precision: 13,
-      //   // scale: 2
-      // },
+      taxAmount: {
+        type: Sequelize.DECIMAL(13, 2),
+        // precision: 13,
+        // scale: 2
+      },
       createdAt: {
         allowNull: false,
         defaultValue: Sequelize.fn('now'),
