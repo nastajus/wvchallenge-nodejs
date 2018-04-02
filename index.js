@@ -7,6 +7,7 @@ const mkdirp = require('mkdirp');
 const fs = require('fs');
 const csvjson = require('csvjson');
 const Loggable = require('./Loggable');
+//const models = require('./models')['sequelize'];
 
 const DATABASE_NAME = 'nastajus_wvchallenge_db';
 const DATABASE_DIALECT = 'mysql';
@@ -27,6 +28,7 @@ sequelize.authenticate()
 		console.error('Unable to connect to the ' + DATABASE_DIALECT + ' database \'' + DATABASE_NAME + '\': ', err);
 	});
 
+const Employee = sequelize.import(__dirname + "/models/employee");
 
 
 // web app setup
@@ -50,7 +52,7 @@ app.post('/test', function (req, res) {
 	let data = fs.readFileSync(req.files.expenseFile.path, { encoding : 'utf8'});
 	let expenseItemsFile = csvjson.toObject(data, { delimiter: ',', quote: '"' });
 
-	let log = new Loggable( {
+	let fileUploadLog = new Loggable( {
 		event: "file upload",
 		size: req.files.expenseFile.size,
 		type: req.files.expenseFile.type,
@@ -58,8 +60,31 @@ app.post('/test', function (req, res) {
 		uploadedName: req.files.expenseFile.path.split(path.sep).pop()
 	});
 
-	log.print();
+	fileUploadLog.print();
 
+
+	expenseItemsFile.forEach(function(expenseFileEntry) {
+		Employee.build({name: expenseFileEntry['employee name'], address: expenseFileEntry['employee address'] }).save().catch(error => { /*oops*/ });
+	});
+
+/*
+	var a = ["a", "b", "c"];
+	a.forEach(function(entry) {
+		console.log(entry);
+	});
+
+
+	// you can also build, save and access the object with chaining:
+	Employee
+		.build({ name: expenseItemsFile['employee name'], address: expenseItemsFile['employee address'] })
+		.save()
+		.then(anotherTask => {
+			// you can now access the currently saved task with the variable anotherTask... nice!
+		})
+		.catch(error => {
+			// Ooops, do some error-handling
+		})
+*/
 	res.send('test response');
 });
 
