@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "nastajus_wvchallenge_user",
+    "password": "nastajus_wvchallenge_pass",
+    "database": "nastajus_wvchallenge_db",
+    "host": "localhost",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "nastajus_wvchallenge_user",
+    "password": "nastajus_wvchallenge_pass",
+    "database": "nastajus_wvchallenge_db_test",
+    "host": "localhost",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "nastajus_wvchallenge_user",
+    "password": "nastajus_wvchallenge_pass",
+    "database": "nastajus_wvchallenge_db_prod",
+    "host": "localhost",
+    "dialect": "mysql"
+  }
+}

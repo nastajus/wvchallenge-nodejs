@@ -6,8 +6,30 @@ const formidable = require ('express-formidable');
 const mkdirp = require('mkdirp');
 const fs = require('fs');
 const csvjson = require('csvjson');
-
 const Loggable = require('./Loggable');
+
+const DATABASE_NAME = 'nastajus_wvchallenge_db';
+const DATABASE_DIALECT = 'mysql';
+
+
+//database stuff
+
+const Sequelize = require('sequelize');
+const sequelize = new Sequelize(DATABASE_NAME, 'nastajus_wvchallenge_user', 'nastajus_wvchallenge_pass', {
+	host: 'localhost',
+	dialect: DATABASE_DIALECT
+});
+
+sequelize.authenticate()
+	.then(() => {
+		console.log('Connection to '+ DATABASE_DIALECT +' database \'' + DATABASE_NAME + '\' has been established successfully.');
+	}).catch(err => {
+		console.error('Unable to connect to the ' + DATABASE_DIALECT + ' database \'' + DATABASE_NAME + '\': ', err);
+	});
+
+
+
+// web app setup
 const app = express();
 
 //ensures empty folder `upload` exists without fuss.

@@ -5,6 +5,18 @@ The purpose of this exercise is to create something that we can work on together
 
 ... see [original readme description](https://github.com/wvchallenges/se-challenge-expenses) here.
 
+# Setup
+
+1. install dependencies of this node package
+1. create Schema in MySQL
+    * Inside MySQL CLI run:
+    * `CREATE DATABASE nastajus_wvchallenge_db;`
+    * `CREATE USER 'nastajus_wvchallenge_user'@'localhost' IDENTIFIED BY 'nastajus_wvchallenge_pass';`
+    * `GRANT ALL PRIVILEGES ON *.* TO 'nastajus_wvchallenge_user'@'localhost' WITH GRANT OPTION;`
+1. test db connection
+    * running index.js without error would prove it
+
+
 ## Requirements Summary:
 * Upload this [CSV](https://github.com/wvchallenges/se-challenge-expenses/blob/master/data_example.csv) file via form entry.
 * Persist to a relational database.
@@ -26,6 +38,10 @@ The purpose of this exercise is to create something that we can work on together
 1. Absolutely!
 
 
+# Snapshot of Thought Process
+
+Everything below this point is extraneous details beyond the requirements specified in the Wave Challenge.  It is included to demonstrate my thinking process when designing an application, with references linked justifying decisions made where meaningful.
+
 ## Lessons Learned
 ### JavaScript
 * Initially I began with assumptions of JavaScript I didn't realize I had, until I began trying to treat it in familar ways like Java. For example I assumed variable references would *pass by reference*, which is typically not the case. However I've learned I can achieve that affect with arrays [here](https://stackoverflow.com/questions/5865094/how-can-i-store-reference-to-a-variable-within-an-array), so I intend to leverage that in my designs.
@@ -34,12 +50,22 @@ The purpose of this exercise is to create something that we can work on together
 ### Node
 * *TBD: Possibly discuss any of: package management (?), any libraries (?), any IDE-specific things (like Webstorm's Typescript Language Service) (?), any general TypeScript-specific things (like needing a matching `@types/libxyz` version to your library) (?).*
 
+### Databases
+* *TBD: Table names are case-sensitive depending on your system, per [here](https://stackoverflow.com/questions/2009005/are-column-and-table-name-case-sensitive-in-mysql), noticed while setting up Sequelize & double-checking.*
+
+### Design
+* Originally I planned to use a low level library like `knex`, to avoid learning unnecessary abstraction layer. However when I realized the model would not be clearly exposed through the main server language, JavaScript, I moved onto learning an ORM library like `Sequelize`. My original intention to stick with purely familiar SQL queries somewhat breaks one of the wave challenge requirements to easily show the model, perhaps for only my own subjective requirement that this project be setup as much as possible via a single interface, namely `npm`/`node`/`JavaScript`. I am appreciating the ease provided by this level of abstraction.
+
+
+
 ## Standards Applied
 ### JavaScript
 * Considered using **[chaining](https://schier.co/blog/2013/11/14/method-chaining-in-javascript.html)**, but decided to design for now using a single method `Loggable.print()` over chaining multiple smaller methods, as advised by the [rule of threes](https://en.wikipedia.org/wiki/Rule_of_three_(computer_programming)) and to keep as lightweight as possible for reading.
 * *TBD: Verify convention of capitalization of constants [here](https://en.wikipedia.org/wiki/Naming_convention_(programming)#JavaScript).*
 * *TBD: Applied convention that when constructing instances of objects with `new` the function should be named beginning with a capital letter.*
 * *TBD: Applied correct standard of adding properties to object by iterating and checking for `hasOwnProperty` as shown [here](https://stackoverflow.com/questions/500504/why-is-using-for-in-with-array-iteration-a-bad-idea/4261096#4261096).*
+* *TBD: Used an **[IIFE](https://stackoverflow.com/questions/8228281/what-is-the-function-construct-in-javascript)** in a **named function** `appendLogFile` inside `print`, *
 
 ### Design
 * *TBD: Chose to use node library `mkdirp` to make empty folders like `/uploads`, `/logs`, instead of providing configuration instructions to create empty folders, to avoid imposing effort expended at configuring setup, at the cost of including yet another library which might potentiall interfere later. Absence of these empty folders throws an exception otherwise. If Git permitted storing empty folders I would rely on that instead.*
+* *TBD: In my personal projects, I tend to put extra comments & extra implementation samples when I'm initially implementing, then subsequently deleting the more irrelevant ones on the next commit, as part of some other larger work item. I use this as a way of documenting my thought process. For production repositories I do this less or not at all.*

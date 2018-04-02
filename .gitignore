@@ -79,5 +79,6 @@ build/Release
 node_modules
 
 
-# Uploads directory
+# Application-specific working directories
 uploads
+logs
