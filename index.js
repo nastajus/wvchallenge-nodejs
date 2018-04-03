@@ -77,14 +77,78 @@ app.get('/employees/:id/expenses', function (req, res) {
 
 	Expense.findAll({
 		where: {empId: req.params.id},
-		attributes: [ 'empId', 'date', 'category', 'expDescription', 'preTaxAmount', 'taxName', 'taxAmount' ]
+		attributes: [ 'expId', 'empId', 'date', 'category', 'expDescription', 'preTaxAmount', 'taxName', 'taxAmount' ]
 	}).then(function(expenses) {
+		expenses.forEach( expense => {
+			expense.preTaxAmount = expense.preTaxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })
+			expense.taxAmount = expense.taxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })
+		});
 		res.render('employeeExpenses.ejs', { expenses: expenses})
 	}).catch(function(err) {
 		// your error handling code here
 	});
 
 });
+
+
+
+app.get('/expenses/category/:category', function(req, res) {
+	Expense.findAll({
+		where: {category: decodeURIComponent(req.params.category)},
+		attributes: [ 'expId', 'empId', 'date', 'category', 'expDescription', 'preTaxAmount', 'taxName', 'taxAmount' ]
+	}).then(function(expenses) {
+		expenses.forEach( expense => {
+			expense.preTaxAmount = expense.preTaxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })
+			expense.taxAmount = expense.taxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })
+		});
+		res.render('expenses.ejs', { expenses: expenses})
+	}).catch(function(err) {
+		// your error handling code here
+	});
+});
+
+
+
+app.get('/expenses/description/:expDescription', function(req, res) {
+	Expense.findAll({
+		where: {expDescription: decodeURIComponent(req.params.expDescription)},
+		attributes: [ 'expId', 'empId', 'date', 'category', 'expDescription', 'preTaxAmount', 'taxName', 'taxAmount' ]
+	}).then(function(expenses) {
+		expenses.forEach( expense => {
+			expense.preTaxAmount = expense.preTaxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })
+			expense.taxAmount = expense.taxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })
+		});
+		res.render('expenses.ejs', { expenses: expenses})
+	}).catch(function(err) {
+		// your error handling code here
+	});
+});
+
+
+
+app.get('/expenses', function(req, res) {
+	Expense.findAll({
+		attributes: [ 'expId', 'empId', 'date', 'category', 'expDescription', 'preTaxAmount', 'taxName', 'taxAmount' ]
+	}).then(function(expenses) {
+		expenses.forEach( expense => {
+			expense.preTaxAmount = expense.preTaxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })
+			expense.taxAmount = expense.taxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 })
+		});
+		res.render('expenses.ejs', { expenses: expenses})
+	}).catch(function(err) {
+		// your error handling code here
+	});
+});
+
+
+
+app.get('expenses/dates', function(req, res) {
+	Expense.findAll({
+		attributes: ['date']
+	})
+});
+
+
 
 
 app.post('/test', function (req, res) {
@@ -138,9 +202,6 @@ app.post('/test', function (req, res) {
 	res.send('test response');
 });
 
-app.get('/employees', (req, res, next)=>{
-
-});
 
 app.listen(port, function () {
 	console.log('listening on port ' + port);
