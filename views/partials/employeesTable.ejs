@@ -1,0 +1,15 @@
+<h3>Employee list</h3>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Address</th>
+    </tr>
+    <% if (typeof employees == 'object' && employees) { %>
+    <% employees.forEach((employee, index) => { %>
+    <tr class="<%= (index % 2 == 0) ? 'odd' : 'even' %>">
+        <td><%= employee.name %></td>
+        <td><%= employee.address %></td>
+    </tr>
+    <% }); %>
+    <% } %>
+</table>

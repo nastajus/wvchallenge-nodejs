@@ -1,0 +1,17 @@
+<div>
+    <ul>
+        <li><a href="/employees">(GET) /employees</a></li>
+        <li><a href="/expenses">(GET) /expenses</a></li>
+        <li><input type="submit" class="linkButton" /></li>
+        <li>
+            <form action="/employees" method="post" id="form_post_employees">
+                <a href="javascript:{}" onclick="document.getElementById('form_post_employees').submit(); return false;">(POST) /employees</a>
+            </form>
+        </li>
+        <li>
+            <form action="/expenses" method="post" id="form_post_expenses">
+                <a href="javascript:{}" onclick="document.getElementById('form_post_expenses').submit(); return false;">(POST) /expenses</a>
+            </form>
+        </li>
+   </ul>
+</div>

@@ -2,14 +2,22 @@
 <html>
 <head>
     <title>Wave Challenge</title>
+    <link rel="stylesheet" href="../styles/style.css" type="text/css">
 </head>
+
 <body>
-<h1>Expenses Upload</h1>
-<form method="POST" action="/test" enctype="multipart/form-data">
-    <label>test</label>
-    <input type="file" name="expenseFile">
-    <input type="hidden" name="hiddenField" value="1234">
-    <input type="submit">
-</form>
+
+<%- include partials/headerBreadcrumbs.ejs %>
+
+<%- include partials/uploadForm.ejs %>
+
+<%#- include('partials/cellDelete', {id: employee.id}); %>
+
+<%#- include('partials/employeesTable', {id: employee.id}); %>
+
+<%#- include partials/employeesTable.ejs %>
+
+<%#- include partials/expensesTable.ejs %>
+
 </body>
 </html>

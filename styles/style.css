@@ -1,0 +1,20 @@
+ul {
+    list-style-type: none;
+    padding: 0;
+    display: table-cell;
+}
+.linkButton {
+    background: none;
+    border: none;
+    color: #0066ff;
+    text-decoration: underline;
+    cursor: pointer;
+}
+tr.even td {
+    background-color: #CC9999;
+    color: black;
+}
+tr.odd td {
+    background-color: #9999CC;
+    color: black;
+}

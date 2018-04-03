@@ -36,12 +36,14 @@ const Expense = sequelize.import(__dirname + "/models/expense");
 
 
 // web app setup
-const apiController = require('./controllers/api');
+const apiRoutes = require('./routes/api');
 const app = express();
+//app.use(express.static(__dirname + '/public'));
+app.use("/styles",express.static(__dirname + "/styles"));
 
 
 
-app.use('/api', apiController);
+app.use('/api', apiRoutes);
 
 
 
@@ -57,6 +59,19 @@ app.use(formidable({uploadDir: path.join(__dirname, 'uploads')}));
 app.get('/', function (req, res) {
 	res.render('index.ejs', {} );
 });
+
+app.get('/employees', function (req, res) {
+
+	Employee.findAll({
+		attributes: ['name', 'address']
+	}).then(function(employees) {
+		res.render('employees.ejs', { employees: employees })
+	}).catch(function(err) {
+		// your error handling code here
+	});
+
+});
+
 
 app.post('/test', function (req, res) {
 
@@ -107,6 +122,10 @@ app.post('/test', function (req, res) {
 	});
 
 	res.send('test response');
+});
+
+app.get('/employees', (req, res, next)=>{
+
 });
 
 app.listen(port, function () {

@@ -1,9 +1,9 @@
 const express = require('express');
-const articleRouter = require('./articleRouter');
+const employeesRouter = require('./employeesRouter');
 
 var router = express.Router();
 
-router.use('/article', articleRouter);
+router.use('/employees', employeesRouter);
 
 // router.get('/blah', (req... ) => {
 //
