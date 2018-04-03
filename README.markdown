@@ -7,23 +7,29 @@ The purpose of this exercise is to create something that we can work on together
 
 # Setup
 
-1. install dependencies of this node package
-1. create Schema in MySQL
+1. Have [Git installed](https://git-scm.com/downloads) and [clone this repository](https://help.github.com/articles/cloning-a-repository/).
+1. Have [Node installed](https://nodejs.org/en/download/) then get dependencies of this node package
+    * Inside this folder run: 
+    * `npm install` 
+1. Have [MySQL installed](https://dev.mysql.com/downloads/installer/) and create Schema:
     * Inside MySQL CLI run:
     * `CREATE DATABASE nastajus_wvchallenge_db;`
     * `CREATE USER 'nastajus_wvchallenge_user'@'localhost' IDENTIFIED BY 'nastajus_wvchallenge_pass';`
     * `GRANT ALL PRIVILEGES ON *.* TO 'nastajus_wvchallenge_user'@'localhost' WITH GRANT OPTION;`
     * test db connection works by running `/index.js` without error, proving this connects
 1. run [sequelize-cli](https://github.com/sequelize/cli#sequelizecli---) migration
+    * Inside this folder run:
     * `node_modules/.bin/sequelize db:migrate`
 
-* optional data clean up commands:
+# Useful commands
+
+* optional clean up commands:
     * `node_modules/.bin/sequelize db:migrate`
     * `node_modules/.bin/sequelize db:migrate:undo`
     * `node_modules/.bin/sequelize db:seed:all`
     * ~~`node_modules/.bin/sequelize db:seed:undo`    *(TBD)*~~
 
-* reset all data in one command (my favourite):
+* reset all tables  with this all-in-one command (my favourite):
     * `node_modules/.bin/sequelize db:migrate:undo; node_modules/.bin/sequelize db:migrate:undo; node_modules/.bin/sequelize db:migrate;`
         * **migrate:undo** - done twice, since there's two migration files.
         * **migrate** - done once, since it applies them all.
@@ -32,28 +38,41 @@ The purpose of this exercise is to create something that we can work on together
 
 ### **currently**
 
-    GET /
+    GET  /
 show landing page, with browse button
+
+    GET  /employee
+list all employees
+
+    GET  /employee/:empId/expenses
+list all expenses for a specific employee ID
+
+    GET  /expenses
+list all expenses 
+
+    GET  /expenses/category/:urlEncodedCategory
+list all expenses with matching category
+
+    GET  /expenses/description/:urlEncodedDescription
+list all expenses with matching description
 
     POST /test
 upload CSV file submission. replies with merely text "test response"
 
-### **considering**
 
-    GET  /employee
-    GET  /employee/empId
+
+### **considering**
+    GET  /expenses/dates
+    GET  /employee/:empId
     POST /employee
-    POST /employee/empId
-    GET  /employee/empId/expenses
-    GET  /employee/empId/expenses/expId
+    POST /employee/:empId
+    GET  /employee/:empId/expenses/:expId
 
 .
 
     POST /expenses
-file upload of expenses in known CSV format.
+file upload of expenses in known CSV format. (redo ```GET /test``` to accept both multipart CSV file upload & individual user-typed form submissions)
 
-    GET /expenses
-show all expenses *(TBD perhaps paginate)*
 
 # Demonstration Thought Process
 
@@ -96,9 +115,10 @@ Everything below this point is extraneous details beyond the requirements specif
 
 ## Decisions Made
 ### JavaScript
-* Considered using **[chaining](https://schier.co/blog/2013/11/14/method-chaining-in-javascript.html)**, but decided to design for now using a single method `Loggable.print()` over chaining multiple smaller methods, as advised by the [rule of threes](https://en.wikipedia.org/wiki/Rule_of_three_(computer_programming)) and to keep as lightweight as possible for reading.
+* Considered using **[chaining](https://schier.co/blog/2013/11/14/method-chaining-in-javascript.html)**, but decided to design for now using a single method `Loggable.print()` over chaining multiple smaller methods, as advised by the [rule of threes](https://en.wikipedia.org/wiki/Rule_of_three_(computer_programming)) and to keep as lightweight as possible for reading. 
+    * Considered again to use **chaining** so I could perform mutations on objects to factor out often-repeating code in my various router queries like `toLocaleString`, but I [didn't arrive at](https://stackoverflow.com/questions/14034180/why-is-extending-native-objects-a-bad-practice) a satisfactory justification for extending `String` object to my own whims. 
 * Chose to accept slight performance hit by nesting `Employee.build` inside `expenseItemsFile.forEach`, due to the simplicity. This causes every row to hit the database individually, instead of in bulk all at once. Ideally this would be reversed by using **promises**.
-    * This has led to the occasional async error being thrown: `Unhandled rejection SequelizeUniqueConstraintError: Validation error`
+    * This has led to the occasional async error being thrown: `Unhandled rejection SequelizeUniqueConstraintError: Validation error`, causing the loss of those few data points during upload. *(TODO: fix obviously.)*
 * *TBD: Verify convention of capitalization of constants [here](https://en.wikipedia.org/wiki/Naming_convention_(programming)#JavaScript).*
 * *TBD: Applied convention that when constructing instances of objects with `new` the function should be named beginning with a capital letter.*
 * *TBD: Applied correct standard of adding properties to object by iterating and checking for `hasOwnProperty` as shown [here](https://stackoverflow.com/questions/500504/why-is-using-for-in-with-array-iteration-a-bad-idea/4261096#4261096).*
@@ -109,6 +129,9 @@ Everything below this point is extraneous details beyond the requirements specif
 
 ### Design
 * Originally I planned to use a low level library like `knex`, to avoid learning unnecessary abstraction layer. However when I realized the model would not be clearly exposed through the main server language, JavaScript, I moved onto learning an ORM library like `Sequelize`. My original intention to stick with purely familiar SQL queries somewhat breaks one of the wave challenge requirements to easily show the model, perhaps for only my own subjective requirement that this project be setup as much as possible via a single interface, namely `npm`/`node`/`JavaScript`. I am appreciating the ease provided by this level of abstraction.
+* Chose to use a [template engine](https://expressjs.com/en/guide/using-template-engines.html) so I could iterate through data returned from queries to present in a simple table format. Chose [EJS](http://www.embeddedjs.com/) since it was the most familiar.
+* Minimal front-end.
+* Minimal libraries. 
 
 * *TBD: Chose to use node library `mkdirp` to make empty folders like `/uploads`, `/logs`, instead of providing configuration instructions to create empty folders, to avoid imposing effort expended at configuring setup, at the cost of including yet another library which might potentiall interfere later. Absence of these empty folders throws an exception otherwise. If Git permitted storing empty folders I would rely on that instead.*
 * *TBD: In my personal projects, I tend to put extra comments & extra implementation samples when I'm initially implementing, then subsequently deleting the more irrelevant ones on the next commit, as part of some other larger work item. I use this as a way of documenting my thought process. For production repositories I do this less or not at all.*
