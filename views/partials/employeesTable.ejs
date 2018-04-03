@@ -7,8 +7,8 @@
     <% if (typeof employees == 'object' && employees) { %>
     <% employees.forEach((employee, index) => { %>
     <tr class="<%= (index % 2 == 0) ? 'odd' : 'even' %>">
-        <td><%= employee.name %></td>
-        <td><%= employee.address %></td>
+        <td><a href="/employees/<%= employee.empId %>/expenses"><%= employee.name %></a></td>
+        <td><a href="/employees/<%= employee.empId %>/expenses"><%= employee.address %></a></td>
     </tr>
     <% }); %>
     <% } %>

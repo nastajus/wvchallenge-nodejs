@@ -60,12 +60,26 @@ app.get('/', function (req, res) {
 	res.render('index.ejs', {} );
 });
 
-app.get('/employees', function (req, res) {
+app.get('/employees/', function (req, res) {
 
 	Employee.findAll({
-		attributes: ['name', 'address']
+		attributes: ['name', 'address', 'empId']
 	}).then(function(employees) {
 		res.render('employees.ejs', { employees: employees })
+	}).catch(function(err) {
+		// your error handling code here
+	});
+
+});
+
+
+app.get('/employees/:id/expenses', function (req, res) {
+
+	Expense.findAll({
+		where: {empId: req.params.id},
+		attributes: [ 'empId', 'date', 'category', 'expDescription', 'preTaxAmount', 'taxName', 'taxAmount' ]
+	}).then(function(expenses) {
+		res.render('employeeExpenses.ejs', { expenses: expenses})
 	}).catch(function(err) {
 		// your error handling code here
 	});

@@ -3,18 +3,19 @@ ul {
     padding: 0;
     display: table-cell;
 }
-.linkButton {
-    background: none;
-    border: none;
-    color: #0066ff;
-    text-decoration: underline;
+tr.even:hover, tr.odd:hover {
+    background-color: lightpink;
     cursor: pointer;
 }
-tr.even td {
+tr.even  {
     background-color: #CC9999;
     color: black;
 }
-tr.odd td {
+tr.odd  {
     background-color: #9999CC;
+    color: black;
+}
+tr>td>a {
+    text-decoration: none;
     color: black;
 }
