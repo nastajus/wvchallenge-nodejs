@@ -17,11 +17,16 @@ The purpose of this exercise is to create something that we can work on together
 1. run [sequelize-cli](https://github.com/sequelize/cli#sequelizecli---) migration
     * `node_modules/.bin/sequelize db:migrate`
 
-* optional data clean up
+* optional data clean up commands:
     * `node_modules/.bin/sequelize db:migrate`
     * `node_modules/.bin/sequelize db:migrate:undo`
     * `node_modules/.bin/sequelize db:seed:all`
     * ~~`node_modules/.bin/sequelize db:seed:undo`    *(TBD)*~~
+
+* reset all data in one command (my favourite):
+    * `node_modules/.bin/sequelize db:migrate:undo; node_modules/.bin/sequelize db:migrate:undo; node_modules/.bin/sequelize db:migrate;`
+        * **migrate:undo** - done twice, since there's two migration files.
+        * **migrate** - done once, since it applies them all.
 
 # RESTful API
 
@@ -93,10 +98,14 @@ Everything below this point is extraneous details beyond the requirements specif
 ### JavaScript
 * Considered using **[chaining](https://schier.co/blog/2013/11/14/method-chaining-in-javascript.html)**, but decided to design for now using a single method `Loggable.print()` over chaining multiple smaller methods, as advised by the [rule of threes](https://en.wikipedia.org/wiki/Rule_of_three_(computer_programming)) and to keep as lightweight as possible for reading.
 * Chose to accept slight performance hit by nesting `Employee.build` inside `expenseItemsFile.forEach`, due to the simplicity. This causes every row to hit the database individually, instead of in bulk all at once. Ideally this would be reversed by using **promises**.
+    * This has led to the occasional async error being thrown: `Unhandled rejection SequelizeUniqueConstraintError: Validation error`
 * *TBD: Verify convention of capitalization of constants [here](https://en.wikipedia.org/wiki/Naming_convention_(programming)#JavaScript).*
 * *TBD: Applied convention that when constructing instances of objects with `new` the function should be named beginning with a capital letter.*
 * *TBD: Applied correct standard of adding properties to object by iterating and checking for `hasOwnProperty` as shown [here](https://stackoverflow.com/questions/500504/why-is-using-for-in-with-array-iteration-a-bad-idea/4261096#4261096).*
 * *TBD: Used an **[IIFE](https://stackoverflow.com/questions/8228281/what-is-the-function-construct-in-javascript)** in a **named function** `appendLogFile` inside `print`*
+
+### Database
+* Made `employee.name` be a unique key requirement with `unique: true`, and to lookup existing employee name and if found, access the matching employee ID `employee.empId` to reuse. Ideally I'd use an aggregate of the unique keys of both employee name and employee address, but it's not immediately obvious to me how to do this in Sequelize, so I'm not bothering.
 
 ### Design
 * Originally I planned to use a low level library like `knex`, to avoid learning unnecessary abstraction layer. However when I realized the model would not be clearly exposed through the main server language, JavaScript, I moved onto learning an ORM library like `Sequelize`. My original intention to stick with purely familiar SQL queries somewhat breaks one of the wave challenge requirements to easily show the model, perhaps for only my own subjective requirement that this project be setup as much as possible via a single interface, namely `npm`/`node`/`JavaScript`. I am appreciating the ease provided by this level of abstraction.

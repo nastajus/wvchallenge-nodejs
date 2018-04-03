@@ -7,7 +7,10 @@ module.exports = (sequelize, DataTypes) => {
 	  autoIncrement: true,
 	  allowNull: false
     },
-    name: DataTypes.STRING,
+    name: {
+      type: DataTypes.STRING,
+	  unique: true
+    },
     address: DataTypes.STRING
   }, {});
   Employee.associate = function(models) {
