@@ -114,6 +114,7 @@ Everything below this point is extraneous details beyond the requirements specif
 
 
 ## Decisions Made
+
 ### JavaScript
 * Considered using **[chaining](https://schier.co/blog/2013/11/14/method-chaining-in-javascript.html)**, but decided to design for now using a single method `Loggable.print()` over chaining multiple smaller methods, as advised by the [rule of threes](https://en.wikipedia.org/wiki/Rule_of_three_(computer_programming)) and to keep as lightweight as possible for reading. 
     * Considered again to use **chaining** so I could perform mutations on objects to factor out often-repeating code in my various router queries like `toLocaleString`, but I [didn't arrive at](https://stackoverflow.com/questions/14034180/why-is-extending-native-objects-a-bad-practice) a satisfactory justification for extending `String` object to my own whims. 
@@ -135,3 +136,8 @@ Everything below this point is extraneous details beyond the requirements specif
 
 * *TBD: Chose to use node library `mkdirp` to make empty folders like `/uploads`, `/logs`, instead of providing configuration instructions to create empty folders, to avoid imposing effort expended at configuring setup, at the cost of including yet another library which might potentiall interfere later. Absence of these empty folders throws an exception otherwise. If Git permitted storing empty folders I would rely on that instead.*
 * *TBD: In my personal projects, I tend to put extra comments & extra implementation samples when I'm initially implementing, then subsequently deleting the more irrelevant ones on the next commit, as part of some other larger work item. I use this as a way of documenting my thought process. For production repositories I do this less or not at all.*
+
+### Coding
+* Interestingly, I've resorted to formatting database output in two different ways. I'd very much prefer to standardize into either using fully the Sequelize API, or fully using native JavaScript, but both have proven uncooperative. At least these are both done on the backend. (TODO: normalize these).
+    * One by modifying `attribute` parameters like so: `[sequelize.fn('date_format', sequelize.col('date'), '%Y-%m-%d'), 'date']]`
+    * The other by modifying with raw JavaScript like so: `expense.preTaxAmount = expense.preTaxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 });`
