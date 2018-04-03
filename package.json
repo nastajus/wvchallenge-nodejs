@@ -17,7 +17,6 @@
   },
   "homepage": "https://github.com/nastajus/wvchallenge-nodejs#readme",
   "dependencies": {
-    "@types/express": "^4.11.1",
     "@types/express-formidable": "^1.0.2",
     "@types/sequelize": "^4.27.12",
     "csvjson": "^5.0.0",
