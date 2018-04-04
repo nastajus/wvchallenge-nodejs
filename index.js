@@ -67,7 +67,7 @@ app.get('/employees/', function (req, res) {
 	}).then(function(employees) {
 		res.render('employees.ejs', { employees: employees })
 	}).catch(function(err) {
-		// your error handling code here
+        console.error(err);
 	});
 
 });
@@ -86,7 +86,7 @@ app.get('/employees/:id/expenses', function (req, res) {
 		});
 		res.render('employeeExpenses.ejs', { expenses: expenses})
 	}).catch(function(err) {
-		// your error handling code here
+        console.error(err);
 	});
 
 });
@@ -105,7 +105,7 @@ app.get('/expenses/category/:category', function(req, res) {
 		});
 		res.render('expenses.ejs', { expenses: expenses})
 	}).catch(function(err) {
-		// your error handling code here
+        console.error(err);
 	});
 });
 
@@ -123,7 +123,7 @@ app.get('/expenses/description/:expDescription', function(req, res) {
 		});
 		res.render('expenses.ejs', { expenses: expenses})
 	}).catch(function(err) {
-		// your error handling code here
+        console.error(err);
 	});
 });
 
@@ -140,7 +140,7 @@ app.get('/expenses', function(req, res) {
 		});
 		res.render('expenses.ejs', { expenses: expenses})
 	}).catch(function(err) {
-		// your error handling code here
+        console.error(err);
 	});
 });
 
@@ -156,39 +156,9 @@ app.get('/expenses/dates', function(req, res) {
         "COUNT(expenses.expId) as countExpense FROM `expenses`" +
         "GROUP BY niceDate",
         { type: sequelize.QueryTypes.SELECT})
-        //.then(users => {
-            // We don't need spread here, since only the results will be returned for select queries
-        //})
-
-    //Expense.findAll({
-        /*
-        //is not a valid attribute definition. Please use the following format: ['attribute definition', 'alias']
-        attributes: {
-            include: ['Expense.expId', [
-                sequelize.fn('COUNT', sequelize.col('Expense.expId')), 'numberOfExpenses',
-                sequelize.fn('SUM', sequelize.col('Expense.preTaxAmount')), 'totalPreTaxAmount'
-            ]]
-        },
-        group: ['Expense.expId', 'Expense.preTaxAmount']
-        */
-            /*
-            attributes: [
-                //[sequelize.fn('sum', sequelize.col('preTaxAmount')), 'totalPreTaxAmount'],
-                [sequelize.fn('COUNT', sequelize.col('Expense.preTaxAmount')), 'countPreTaxAmount'],
-                [sequelize.fn('date_format', sequelize.col('date'), '%Y-%m'), 'date']],
-            group: ['date']
-            */
-    // }).then(function(expenses) {
-    //
-    //}).then(function(expenses) {
     .then(function(expenses) {
-        expenses.forEach( expense => {
-            // expense.preTaxAmount = expense.preTaxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 });
-            // expense.taxAmount = expense.taxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 });
-        });
         res.render('expensesDates.ejs', { expenses: expenses})
     }).catch(function(err) {
-        // your error handling code here
         console.error(err);
     });
 });

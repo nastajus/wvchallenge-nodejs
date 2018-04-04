@@ -79,6 +79,10 @@ upload CSV file submission. replies with merely text "test response"
 file upload of expenses in known CSV format. (redo ```GET /test``` to accept both multipart CSV file upload & individual user-typed form submissions)
 
 
+# Opinion on Challenge
+
+Having worked with all these technologies & concepts [for several years at Paymentus](https://www.linkedin.com/in/nastajus/), I simply hadn't put them all together until now, from beginning to end. It was a very rewarding process overall. To keep things interesting I decided to jump head-first into an area I had less experience with and yet conceivably would deploy faster: Node.js. With the bulk of that experience in Java, it was a fun experience, where I resolved many challenges. 
+
 # Demonstration Thought Process
 
 Everything below this point is extraneous details beyond the requirements specified in the Wave Challenge.  It is included to demonstrate my thinking process when designing an application, with references linked justifying decisions made where meaningful.
@@ -98,9 +102,9 @@ Everything below this point is extraneous details beyond the requirements specif
 
 ## Target Evolving Answers
 1. Having chosen to implement this in Nodejs despite a Java background, the nature of nested JavasScript function calls when designing the MVP seems quite flat & non-modular to me. For example nesting validation logic inside the middleware callback, or having all possible HTTP Request endpoints in one file seems unusual to me. *TBD: I'd like to revisit to attempt a greater logical separation, such as with `module.exports`. Initially I'll begin with a single `index.js` file to centralize in, expand into additional modules when passing by*.
-1. Employees & Expenses seem like a very logical initial separation, followed by some higher level abstraction such as Reports. Since monthly totals could potentially always be recalculated, it could be argued as unnecessary to persist those results, however performance at scale would benefit from storing those results. *TBD: I want to establish a basic relationship with unique identifiers such as auto-incrementing integers, so an expense must reference an existing employee.*
-    1. **a design decision regarding business logic, but not regarding models/entities themselves**: Initially the front-end will handle HTTP requests from the simple yet limiting `<form method="POST" ..>` instead of using the more versatile `XMLHttpRequest` object in dozens of lines of code. *TBD: Ideally I'd like to work past the limited requirements of merely displaying the results of the expenses uploaded, by providing in-page editing directly, per-expense. In which case, it would permit a wider Restful API of full CRUD, supporting GET POST PUT and DELETE.*
-1. *TBD*
+1. Employees & Expenses seem like a very logical initial separation. I considered following with a higher level abstraction such as Reports, but recalculating this on-demand seems sufficient for now. The value in persisting such results with a small data set isn't worthwhile, however performance at scale could benefit from storing those results. I have established a basic relationship with unique identifiers such as auto-incrementing integers, so an expense must reference an existing employee.
+    1. **a design decision regarding business logic, but not regarding models/entities themselves**: Initially the front-end will handle HTTP requests from the simple yet limiting `<form method="POST" ..>` instead of using the more versatile `XMLHttpRequest` object in dozens of lines of code. *If this project were to continue, I'd merely displaying the results of the expenses uploaded, by providing in-page editing directly, per-expense, per-employee, etc. In which case, it would permit a wider Restful API of full CRUD, supporting GET POST PUT and DELETE.*
+1. **Folders:** I tried to follow standard hierarchical layouts to isolate various files. Many subfolders were either imposed or conventionally used due to each library's design. Sometime I didn't know where to ideally put things, so I just made a root-level sub-folder to isolate them. **Code:** The root `/index.js` is too large for my tastes, I'd like to separate each Router into a separate file. Otherwise I believe it's all generally well-separated concerns.
 1. Absolutely!
 
 
