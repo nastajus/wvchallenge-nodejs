@@ -7,32 +7,10 @@ const mkdirp = require('mkdirp');
 const fs = require('fs');
 const csvjson = require('csvjson');
 const Loggable = require('./Loggable');
-//const models = require('./models')['sequelize'];
-const models = require('./models');
+const db = require('./models/index');
 
-const DATABASE_NAME = 'nastajus_wvchallenge_db';
-const DATABASE_DIALECT = 'mysql';
-
-
-//database stuff
-
-const Sequelize = require('sequelize');
-const sequelize = new Sequelize(DATABASE_NAME, 'nastajus_wvchallenge_user', 'nastajus_wvchallenge_pass', {
-	host: 'localhost',
-	dialect: DATABASE_DIALECT,
-	//logging: {new Loggable(msg)}      vs.     logging: myLogFunc      with        var myLogFunc = function(msg) {}
-	dialectOptions: {decimalNumbers: true},
-});
-
-sequelize.authenticate()
-	.then(() => {
-		console.log('Connection to '+ DATABASE_DIALECT +' database \'' + DATABASE_NAME + '\' has been established successfully.');
-	}).catch(err => {
-		console.error('Unable to connect to the ' + DATABASE_DIALECT + ' database \'' + DATABASE_NAME + '\': ', err);
-	});
-
-const Employee = sequelize.import(__dirname + "/models/employee");
-const Expense = sequelize.import(__dirname + "/models/expense");
+const Employee = db.sequelize.models.Employee;
+const Expense = db.sequelize.models.Expense;
 
 
 // web app setup
@@ -42,9 +20,7 @@ const app = express();
 app.use("/styles",express.static(__dirname + "/styles"));
 
 
-
 app.use('/api', apiRoutes);
-
 
 
 //ensures empty folder `upload` exists without fuss.
@@ -62,7 +38,7 @@ app.get('/', function (req, res) {
 
 app.get('/employees/', function (req, res) {
 
-	Employee.findAll({
+	db.sequelize.models.Employee.findAll({
 		attributes: ['name', 'address', 'empId']
 	}).then(function(employees) {
 		res.render('employees.ejs', { employees: employees })
@@ -78,7 +54,7 @@ app.get('/employees/:id/expenses', function (req, res) {
 	Expense.findAll({
 		where: {empId: req.params.id},
 		attributes: [ 'expId', 'empId', 'category', 'expDescription', 'preTaxAmount', 'taxName', 'taxAmount',
-            [sequelize.fn('date_format', sequelize.col('date'), '%Y-%m-%d'), 'date']]
+            [db.sequelize.fn('date_format', db.sequelize.col('date'), '%Y-%m-%d'), 'date']]
 	}).then(function(expenses) {
 		expenses.forEach( expense => {
 			expense.preTaxAmount = expense.preTaxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 });
@@ -97,7 +73,7 @@ app.get('/expenses/category/:category', function(req, res) {
 	Expense.findAll({
 		where: {category: decodeURIComponent(req.params.category)},
 		attributes: [ 'expId', 'empId', 'category', 'expDescription', 'preTaxAmount', 'taxName', 'taxAmount',
-            [sequelize.fn('date_format', sequelize.col('date'), '%Y-%m-%d'), 'date']]
+            [db.sequelize.fn('date_format', db.sequelize.col('date'), '%Y-%m-%d'), 'date']]
 	}).then(function(expenses) {
 		expenses.forEach( expense => {
             expense.preTaxAmount = expense.preTaxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 });
@@ -115,7 +91,7 @@ app.get('/expenses/description/:expDescription', function(req, res) {
 	Expense.findAll({
 		where: {expDescription: decodeURIComponent(req.params.expDescription)},
 		attributes: [ 'expId', 'empId', 'category', 'expDescription', 'preTaxAmount', 'taxName', 'taxAmount',
-            [sequelize.fn('date_format', sequelize.col('date'), '%Y-%m-%d'), 'date']]
+            [db.sequelize.fn('date_format', db.sequelize.col('date'), '%Y-%m-%d'), 'date']]
 	}).then(function(expenses) {
 		expenses.forEach( expense => {
             expense.preTaxAmount = expense.preTaxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 });
@@ -132,7 +108,7 @@ app.get('/expenses/description/:expDescription', function(req, res) {
 app.get('/expenses', function(req, res) {
 	Expense.findAll({
 		attributes: [ 'expId', 'empId', 'category', 'expDescription', 'preTaxAmount', 'taxName', 'taxAmount',
-            [sequelize.fn('date_format', sequelize.col('date'), '%Y-%m-%d'), 'date']]
+            [db.sequelize.fn('date_format', db.sequelize.col('date'), '%Y-%m-%d'), 'date']]
     }).then(function(expenses) {
 		expenses.forEach( expense => {
 			expense.preTaxAmount = expense.preTaxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 });
@@ -148,14 +124,14 @@ app.get('/expenses', function(req, res) {
 
 app.get('/expenses/dates', function(req, res) {
 
-    sequelize.query(
+	db.sequelize.query(
         "SELECT *, DATE_FORMAT(expenses.date, '%Y-%m') as niceDate, " +
         "DATE_FORMAT(expenses.date, '%Y') as year, " +
         "DATE_FORMAT(expenses.date, '%m') as month, " +
         "FORMAT(SUM(expenses.preTaxAmount + expenses.taxAmount), 2) as sumAmount," +
         "COUNT(expenses.expId) as countExpense FROM `expenses`" +
         "GROUP BY niceDate",
-        { type: sequelize.QueryTypes.SELECT})
+        { type: db.sequelize.QueryTypes.SELECT})
     .then(function(expenses) {
         res.render('expensesDates.ejs', { expenses: expenses})
     }).catch(function(err) {
@@ -167,7 +143,7 @@ app.get('/expenses/dates', function(req, res) {
 
 app.get('/expenses/dates/:year/:month', function(req, res) {
 
-    sequelize.query(
+	db.sequelize.query(
         "SELECT *, DATE_FORMAT(expenses.date, '%Y-%m') as niceDate, " +
         "DATE_FORMAT(expenses.date, '%Y') as year, " +
         "DATE_FORMAT(expenses.date, '%m') as month, " +
@@ -176,7 +152,7 @@ app.get('/expenses/dates/:year/:month', function(req, res) {
         "GROUP BY niceDate " +
         "HAVING year = " + req.params.year + " " +
         "AND month = " + req.params.month,
-        { type: sequelize.QueryTypes.SELECT})
+        { type: db.sequelize.QueryTypes.SELECT})
         .then(function(expenses) {
             res.render('expensesDates.ejs', { expenses: expenses})
         }).catch(function(err) {
@@ -208,7 +184,7 @@ app.post('/test', function (req, res) {
 
 		// remember to use transaction as you are not sure
 		// whether user is already present in DB or not (and you might end up creating the user - a write operation on DB)
-		models.sequelize.transaction(function(t){
+		db.sequelize.transaction(function(t){
 			return Employee.findOrCreate({
 				where: {
 					name: expenseFileEntry['employee name'],

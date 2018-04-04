@@ -4,7 +4,9 @@
     "password": "nastajus_wvchallenge_pass",
     "database": "nastajus_wvchallenge_db",
     "host": "localhost",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "dialectOptions": {"decimalNumbers": true},
+    "_comment" : "//logging: {new Loggable(msg)}      vs.     logging: myLogFunc      with        var myLogFunc = function(msg) {}"
   },
   "test": {
     "username": "nastajus_wvchallenge_user",
