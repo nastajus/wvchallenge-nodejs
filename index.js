@@ -17,7 +17,9 @@ const Expense = db.sequelize.models.Expense;
 const apiRoutes = require('./routes/api');
 const app = express();
 //app.use(express.static(__dirname + '/public'));
-app.use("/styles",express.static(__dirname + "/styles"));
+//app.use("/styles",express.static(__dirname + "/styles"));
+app.use(express.static(path.resolve('./styles')));
+
 
 
 app.use('/api', apiRoutes);
@@ -36,130 +38,8 @@ app.get('/', function (req, res) {
 	res.render('index.ejs', {} );
 });
 
-app.get('/employees/', function (req, res) {
-
-	db.sequelize.models.Employee.findAll({
-		attributes: ['name', 'address', 'empId']
-	}).then(function(employees) {
-		res.render('employees.ejs', { employees: employees })
-	}).catch(function(err) {
-        console.error(err);
-	});
-
-});
 
 
-app.get('/employees/:id/expenses', function (req, res) {
-
-	Expense.findAll({
-		where: {empId: req.params.id},
-		attributes: [ 'expId', 'empId', 'category', 'expDescription', 'preTaxAmount', 'taxName', 'taxAmount',
-            [db.sequelize.fn('date_format', db.sequelize.col('date'), '%Y-%m-%d'), 'date']]
-	}).then(function(expenses) {
-		expenses.forEach( expense => {
-			expense.preTaxAmount = expense.preTaxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 });
-			expense.taxAmount = expense.taxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 });
-		});
-		res.render('employeeExpenses.ejs', { expenses: expenses})
-	}).catch(function(err) {
-        console.error(err);
-	});
-
-});
-
-
-
-app.get('/expenses/category/:category', function(req, res) {
-	Expense.findAll({
-		where: {category: decodeURIComponent(req.params.category)},
-		attributes: [ 'expId', 'empId', 'category', 'expDescription', 'preTaxAmount', 'taxName', 'taxAmount',
-            [db.sequelize.fn('date_format', db.sequelize.col('date'), '%Y-%m-%d'), 'date']]
-	}).then(function(expenses) {
-		expenses.forEach( expense => {
-            expense.preTaxAmount = expense.preTaxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 });
-            expense.taxAmount = expense.taxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 });
-		});
-		res.render('expenses.ejs', { expenses: expenses})
-	}).catch(function(err) {
-        console.error(err);
-	});
-});
-
-
-
-app.get('/expenses/description/:expDescription', function(req, res) {
-	Expense.findAll({
-		where: {expDescription: decodeURIComponent(req.params.expDescription)},
-		attributes: [ 'expId', 'empId', 'category', 'expDescription', 'preTaxAmount', 'taxName', 'taxAmount',
-            [db.sequelize.fn('date_format', db.sequelize.col('date'), '%Y-%m-%d'), 'date']]
-	}).then(function(expenses) {
-		expenses.forEach( expense => {
-            expense.preTaxAmount = expense.preTaxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 });
-            expense.taxAmount = expense.taxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 });
-		});
-		res.render('expenses.ejs', { expenses: expenses})
-	}).catch(function(err) {
-        console.error(err);
-	});
-});
-
-
-
-app.get('/expenses', function(req, res) {
-	Expense.findAll({
-		attributes: [ 'expId', 'empId', 'category', 'expDescription', 'preTaxAmount', 'taxName', 'taxAmount',
-            [db.sequelize.fn('date_format', db.sequelize.col('date'), '%Y-%m-%d'), 'date']]
-    }).then(function(expenses) {
-		expenses.forEach( expense => {
-			expense.preTaxAmount = expense.preTaxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 });
-			expense.taxAmount = expense.taxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 });
-		});
-		res.render('expenses.ejs', { expenses: expenses})
-	}).catch(function(err) {
-        console.error(err);
-	});
-});
-
-
-
-app.get('/expenses/dates', function(req, res) {
-
-	db.sequelize.query(
-        "SELECT *, DATE_FORMAT(expenses.date, '%Y-%m') as niceDate, " +
-        "DATE_FORMAT(expenses.date, '%Y') as year, " +
-        "DATE_FORMAT(expenses.date, '%m') as month, " +
-        "FORMAT(SUM(expenses.preTaxAmount + expenses.taxAmount), 2) as sumAmount," +
-        "COUNT(expenses.expId) as countExpense FROM `expenses`" +
-        "GROUP BY niceDate",
-        { type: db.sequelize.QueryTypes.SELECT})
-    .then(function(expenses) {
-        res.render('expensesDates.ejs', { expenses: expenses})
-    }).catch(function(err) {
-        console.error(err);
-    });
-});
-
-
-
-app.get('/expenses/dates/:year/:month', function(req, res) {
-
-	db.sequelize.query(
-        "SELECT *, DATE_FORMAT(expenses.date, '%Y-%m') as niceDate, " +
-        "DATE_FORMAT(expenses.date, '%Y') as year, " +
-        "DATE_FORMAT(expenses.date, '%m') as month, " +
-        "FORMAT(SUM(expenses.preTaxAmount + expenses.taxAmount), 2) as sumAmount, " +
-        "COUNT(expenses.expId) as countExpense FROM `expenses` " +
-        "GROUP BY niceDate " +
-        "HAVING year = " + req.params.year + " " +
-        "AND month = " + req.params.month,
-        { type: db.sequelize.QueryTypes.SELECT})
-        .then(function(expenses) {
-            res.render('expensesDates.ejs', { expenses: expenses})
-        }).catch(function(err) {
-        // your error handling code here
-        console.error(err);
-    });
-});
 
 
 

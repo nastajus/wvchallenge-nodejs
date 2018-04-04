@@ -14,10 +14,10 @@
     <% expenses.forEach((expense, index) => { %>
     <tr class="<%= (index % 2 == 0) ? 'odd' : 'even' %>">
         <td><%= expense.date %></td>
-        <td><a href="/expenses/category/<%= encodeURIComponent(expense.category) %>"><%= expense.category %></a></td>
+        <td><a href="/api/expenses/category/<%= encodeURIComponent(expense.category) %>"><%= expense.category %></a></td>
         <!--<td><%#= expense.employeeName %></td>-->
         <!--<td><%#= expense.employeeAddress %></td>-->
-        <td><a href="/expenses/description/<%= encodeURIComponent(expense.expDescription) %>"><%= expense.expDescription %></a></td>
+        <td><a href="/api/expenses/description/<%= encodeURIComponent(expense.expDescription) %>"><%= expense.expDescription %></a></td>
         <td><%= expense.preTaxAmount %></td>
         <td><%= expense.taxName %></td>
         <td><%= expense.taxAmount %></td>
