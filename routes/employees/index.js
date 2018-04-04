@@ -3,7 +3,7 @@ const db      = require('../../models');
 
 const router = express.Router();
 
-router.get('/', (req, res, next) => {
+router.get('/', (req, res) => {
 
 	db.sequelize.models.Employee.findAll({
 		attributes: ['name', 'address', 'empId']
@@ -15,7 +15,7 @@ router.get('/', (req, res, next) => {
 
 });
 
-router.get('/:id/expenses', (req, res, next) => {
+router.get('/:id/expenses', (req, res) => {
 
 	db.sequelize.models.Expense.findAll({
 		where: {empId: req.params.id},

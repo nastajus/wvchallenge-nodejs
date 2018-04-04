@@ -41,47 +41,46 @@ The purpose of this exercise is to create something that we can work on together
     GET  /
 show landing page, with browse button
 
-    GET  /employee
+    POST /api/file
+file upload of expenses in known CSV format. redirects to `/api/employees`
+
+    GET  /api/employee
 list all employees
 
-    GET  /employee/:empId/expenses
+    GET  /api/employee/:empId/expenses
 list all expenses for a specific employee ID
 
-    GET  /expenses
+    GET  /api/expenses
 list all expenses 
 
-    GET  /expenses/dates
+    GET  /api/expenses/dates
 list expense summaries grouped by month (potentially rename)
 
-    GET  /expenses/dates/:year/:month
-*... partially works ...* 
+    GET  /api/expenses/dates/:year/:month
+lists an aggregation of expenses per selected month
 
-    GET  /expenses/category/:urlEncodedCategory
+    GET  /api/expenses/category/:urlEncodedCategory
 list all expenses with matching category
 
-    GET  /expenses/description/:urlEncodedDescription
+    GET  /api/expenses/description/:urlEncodedDescription
 list all expenses with matching description
 
-    POST /test
-upload CSV file submission. replies with merely text "test response"
-
+*NOTE: endpoints that use `:identifiers` can be accessed sometimes via clicking certain column fields.*
 
 
 ### **considering**
-    GET  /employee/:empId
-    POST /employee
-    POST /employee/:empId
-    GET  /employee/:empId/expenses/:expId
+    POST /api/employee
+    POST /api/employee/:empId
+    GET  /api/employee/:empId
+    GET  /api/employee/:empId/expenses/:expId
 
-.
-
-    POST /expenses
-file upload of expenses in known CSV format. (redo ```GET /test``` to accept both multipart CSV file upload & individual user-typed form submissions)
-
+*NOTE: None of these are required.*
 
 # Opinion on Challenge
 
-Having worked with all these technologies & concepts [for several years at Paymentus](https://www.linkedin.com/in/nastajus/), I simply hadn't put them all together until now, from beginning to end. It was a very rewarding process overall. To keep things interesting I decided to jump head-first into an area I had less experience with and yet conceivably would deploy faster: Node.js. With the bulk of that experience in Java, it was a fun experience, where I resolved many challenges. 
+Having worked with all these technologies & concepts [for several years at Paymentus](https://www.linkedin.com/in/nastajus/), I simply hadn't put them all together until now, from beginning to end. It was a very rewarding process overall. To keep things interesting I decided to jump head-first into an area I had less experience with and yet conceivably would deploy faster: Node.js. With the bulk of that experience in Java, it was a fun experience, where I resolved many challenges.
+
+Learned a variety of technologies: node package management, various JavaScript coding quirks & it's various built-in libraries, some differences between IDEs Jetbrains WebStorm vs. Microsoft's VSCode, that TypeScript resolves down regular JavaScript and can enhance IDE static checking but not dynamic checking, how promises have evolved from libraries into defacto language constructs over the last few years, and probably dozens of other details.
 
 # Demonstration Thought Process
 
@@ -100,25 +99,22 @@ Everything below this point is extraneous details beyond the requirements specif
 1. Does your solution use appropriate datatypes for the problem as described?
 
 
-## Target Evolving Answers
-1. Having chosen to implement this in Nodejs despite a Java background, the nature of nested JavasScript function calls when designing the MVP seems quite flat & non-modular to me. For example nesting validation logic inside the middleware callback, or having all possible HTTP Request endpoints in one file seems unusual to me. *TBD: I'd like to revisit to attempt a greater logical separation, such as with `module.exports`. Initially I'll begin with a single `index.js` file to centralize in, expand into additional modules when passing by*.
+## Explanations:
+1. Absolutely!
 1. Employees & Expenses seem like a very logical initial separation. I considered following with a higher level abstraction such as Reports, but recalculating this on-demand seems sufficient for now. The value in persisting such results with a small data set isn't worthwhile, however performance at scale could benefit from storing those results. I have established a basic relationship with unique identifiers such as auto-incrementing integers, so an expense must reference an existing employee.
-    1. **a design decision regarding business logic, but not regarding models/entities themselves**: Initially the front-end will handle HTTP requests from the simple yet limiting `<form method="POST" ..>` instead of using the more versatile `XMLHttpRequest` object in dozens of lines of code. *If this project were to continue, I'd merely displaying the results of the expenses uploaded, by providing in-page editing directly, per-expense, per-employee, etc. In which case, it would permit a wider Restful API of full CRUD, supporting GET POST PUT and DELETE.*
 1. **Folders:** I tried to follow standard hierarchical layouts to isolate various files. Many subfolders were either imposed or conventionally used due to each library's design. Sometime I didn't know where to ideally put things, so I just made a root-level sub-folder to isolate them. **Code:** The root `/index.js` was too large so I isolated some of the Routers into separate files. Any endpoint accessing just an `:identifier` was put into the same file.
 1. Absolutely!
 
 
 ## Lessons Learned
 ### JavaScript
-* Initially I began with assumptions of JavaScript I didn't realize I had, until I began trying to treat it in familar ways like Java. For example I assumed variable references would *pass by reference*, which is typically not the case. However I've learned I can achieve that affect with arrays [here](https://stackoverflow.com/questions/5865094/how-can-i-store-reference-to-a-variable-within-an-array), so I intend to leverage that in my designs.
-* *TBD: Perhaps discuss implementation equivalent of a static variable counter from Java as applied in a JavaScript context, such as mentioned [here](https://stackoverflow.com/questions/1535631/static-variables-in-javascript). However I've realized I don't need to initialize it in the application layer, that solely the database should be responsible for generating unique IDs, so I may just discard this section.*
-* *TBD: Padding trick with `.slice( negative )` [here](http://www.codigomanso.com/en/2010/07/simple-javascript-formatting-zero-padding/).*
-
-### Node
-* *TBD: Possibly discuss any of: package management (?), any libraries (?), any IDE-specific things (like Webstorm's Typescript Language Service) (?), any general TypeScript-specific things (like needing a matching `@types/libxyz` version to your library) (?).*
+* Initially I began with assumptions of JavaScript I didn't realize I had, until I began trying to treat it in familiar ways like Java. For example I assumed variable references would *pass by reference*, which is typically not the case. However I've learned I can achieve that affect with arrays [here](https://stackoverflow.com/questions/5865094/how-can-i-store-reference-to-a-variable-within-an-array), so I intend to leverage that in my designs.
+* Having chosen to implement this in Nodejs despite a Java background, the nature of nested JavasScript function calls when designing the MVP seems quite flat & non-modular to me. For example nesting validation logic inside the middleware callback, or having all possible HTTP Request endpoints in one file seems unusual to me.
+* Used a padding trick with `.slice( negative )` from [here](http://www.codigomanso.com/en/2010/07/simple-javascript-formatting-zero-padding/).
 
 ### Databases
-* *TBD: Table names are case-sensitive depending on your system, per [here](https://stackoverflow.com/questions/2009005/are-column-and-table-name-case-sensitive-in-mysql), noticed while setting up Sequelize & double-checking.*
+* The middleware driver/library selected to connect to the underlying database affects your code significantly. The core body implementations of all routers are just massive blocks of Sequelize API code.
+* Table names are case-sensitive depending on your system, per [here](https://stackoverflow.com/questions/2009005/are-column-and-table-name-case-sensitive-in-mysql), noticed while setting up Sequelize & double-checking.
 
 
 
@@ -129,26 +125,24 @@ Everything below this point is extraneous details beyond the requirements specif
     * Considered again to use **chaining** so I could perform mutations on objects to factor out often-repeating code in my various router queries like `toLocaleString`, but I [didn't arrive at](https://stackoverflow.com/questions/14034180/why-is-extending-native-objects-a-bad-practice) a satisfactory justification for extending `String` object to my own whims. 
 * Chose to accept slight performance hit by nesting `Employee.build` inside `expenseItemsFile.forEach`, due to the simplicity. This causes every row to hit the database individually, instead of in bulk all at once. Ideally this would be reversed by using **promises**.
     * This has led to the occasional async error being thrown: `Unhandled rejection SequelizeUniqueConstraintError: Validation error`, causing the loss of those few data points during upload. *(TODO: fix obviously.)*
-* *TBD: Verify convention of capitalization of constants [here](https://en.wikipedia.org/wiki/Naming_convention_(programming)#JavaScript).*
-* *TBD: Applied convention that when constructing instances of objects with `new` the function should be named beginning with a capital letter.*
-* *TBD: Applied correct standard of adding properties to object by iterating and checking for `hasOwnProperty` as shown [here](https://stackoverflow.com/questions/500504/why-is-using-for-in-with-array-iteration-a-bad-idea/4261096#4261096).*
-* *TBD: Used an **[IIFE](https://stackoverflow.com/questions/8228281/what-is-the-function-construct-in-javascript)** in a **named function** `appendLogFile` inside `print`*
+* Applied correct standard of adding properties to object by iterating and checking for `hasOwnProperty` as shown [here](https://stackoverflow.com/questions/500504/why-is-using-for-in-with-array-iteration-a-bad-idea/4261096#4261096).
+* Used an **[IIFE](https://stackoverflow.com/questions/8228281/what-is-the-function-construct-in-javascript)** in a **named function** `appendLogFile` inside `print`
 
 ### Database
 * Made `employee.name` be a unique key requirement with `unique: true`, and to lookup existing employee name and if found, access the matching employee ID `employee.empId` to reuse. Ideally I'd use an aggregate of the unique keys of both employee name and employee address, but it's not immediately obvious to me how to do this in Sequelize, so I'm not bothering.
 * Used ORM's API as much as was reasonably possible, until the complexity of the query became too obtuse to bother with. Used **raw query** instead to access `/expenses/dates` on a monthly basis. Ideally mixing different levels of abstraction such as this would be minimized for long-term maintainability, however for an MVP prototype this is fine.
+* Originally considered generating unique IDs in-JavaScript, but quickly discarded that idea. The database should be solely responsible for that. Briefly experimented with creating a static variable counter from Java as applied in a JavaScript context, such as mentioned [here](https://stackoverflow.com/questions/1535631/static-variables-in-javascript).
 
 ### Templating
 * The path that references the CSS file needed to be statically accessible, since some templates would render at different directory depths. Designated with `app.use(express.static(path.resolve('./styles')));` and referenced in-EJS templates with `/styles.css` as if directly from the base URL.
 
 ### Design
+* Chose to prevent duplicate employees from hitting database, but allow duplicate expenses from file upload. For a coding challenge, it wasn't worth going into deeper business rules.  I simply wanted to demonstrate awareness of such a requirement. A proper solution might also include logic to prevent expense duplicates.
 * Originally I planned to use a low level library like `knex`, to avoid learning unnecessary abstraction layer. However when I realized the model would not be clearly exposed through the main server language, JavaScript, I moved onto learning an ORM library like `Sequelize`. My original intention to stick with purely familiar SQL queries somewhat breaks one of the wave challenge requirements to easily show the model, perhaps for only my own subjective requirement that this project be setup as much as possible via a single interface, namely `npm`/`node`/`JavaScript`. I am appreciating the ease provided by this level of abstraction.
 * Chose to use a [template engine](https://expressjs.com/en/guide/using-template-engines.html) so I could iterate through data returned from queries to present in a simple table format. Chose [EJS](http://www.embeddedjs.com/) since it was the most familiar.
 * Minimal front-end.
 * Minimal libraries. 
-
-* *TBD: Chose to use node library `mkdirp` to make empty folders like `/uploads`, `/logs`, instead of providing configuration instructions to create empty folders, to avoid imposing effort expended at configuring setup, at the cost of including yet another library which might potentiall interfere later. Absence of these empty folders throws an exception otherwise. If Git permitted storing empty folders I would rely on that instead.*
-* *TBD: In my personal projects, I tend to put extra comments & extra implementation samples when I'm initially implementing, then subsequently deleting the more irrelevant ones on the next commit, as part of some other larger work item. I use this as a way of documenting my thought process. For production repositories I do this less or not at all.*
+* Originally planned to have the front-end issue HTTP requests from the simple yet limiting `<form method="POST" ..>` only instead of using the more versatile `XMLHttpRequest` object in potentially dozens of lines of code. If this project were to continue, I'd merely displaying the results of the expenses uploaded, by providing in-page editing directly, per-expense, per-employee, etc. In which case, it would permit a wider Restful API of full CRUD, supporting GET POST PUT and DELETE.
 
 ### Coding
 * Interestingly, I've resorted to formatting database output in two different ways. I'd very much prefer to standardize into either using fully the Sequelize API, or fully using native JavaScript, but both have proven uncooperative. At least these are both done on the backend. (TODO: normalize these).
