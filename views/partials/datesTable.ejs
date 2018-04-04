@@ -1,0 +1,22 @@
+<h3>Expenses list</h3>
+<table>
+    <tr>
+        <th>date</th>
+        <!--<th>totalPreTaxAmount</th>-->
+        <!--<th>totalTaxAmount</th>-->
+        <th>sumAmount</th>
+        <th>countExpense</th>
+
+    </tr>
+    <% if (typeof expenses == 'object' && expenses) { %>
+    <% expenses.forEach((expense, index) => { %>
+    <tr class="<%= (index % 2 == 0) ? 'odd' : 'even' %>">
+        <td><a href="/expenses/dates/<%= expense.year %>/<%= expense.month %>"><%= expense.niceDate %></a></td>
+        <!--<td><%#= expense.totalPreTaxAmount %></td>-->
+        <!--<td><%#= expense.totalTaxAmount %></td>-->
+        <td><%= expense.sumAmount %></td>
+        <td><%= expense.countExpense %></td>
+    </tr>
+    <% }); %>
+    <% } %>
+</table>

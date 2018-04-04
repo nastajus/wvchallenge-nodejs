@@ -50,6 +50,12 @@ list all expenses for a specific employee ID
     GET  /expenses
 list all expenses 
 
+    GET  /expenses/dates
+list expense summaries grouped by month (potentially rename)
+
+    GET  /expenses/dates/:year/:month
+*... partially works ...* 
+
     GET  /expenses/category/:urlEncodedCategory
 list all expenses with matching category
 
@@ -62,7 +68,6 @@ upload CSV file submission. replies with merely text "test response"
 
 
 ### **considering**
-    GET  /expenses/dates
     GET  /employee/:empId
     POST /employee
     POST /employee/:empId
@@ -127,6 +132,7 @@ Everything below this point is extraneous details beyond the requirements specif
 
 ### Database
 * Made `employee.name` be a unique key requirement with `unique: true`, and to lookup existing employee name and if found, access the matching employee ID `employee.empId` to reuse. Ideally I'd use an aggregate of the unique keys of both employee name and employee address, but it's not immediately obvious to me how to do this in Sequelize, so I'm not bothering.
+* Used ORM's API as much as was reasonably possible, until the complexity of the query became too obtuse to bother with. Used **raw query** instead to access `/expenses/dates` on a monthly basis. Ideally mixing different levels of abstraction such as this would be minimized for long-term maintainability, however for an MVP prototype this is fine.
 
 ### Design
 * Originally I planned to use a low level library like `knex`, to avoid learning unnecessary abstraction layer. However when I realized the model would not be clearly exposed through the main server language, JavaScript, I moved onto learning an ORM library like `Sequelize`. My original intention to stick with purely familiar SQL queries somewhat breaks one of the wave challenge requirements to easily show the model, perhaps for only my own subjective requirement that this project be setup as much as possible via a single interface, namely `npm`/`node`/`JavaScript`. I am appreciating the ease provided by this level of abstraction.

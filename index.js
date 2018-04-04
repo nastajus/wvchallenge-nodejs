@@ -146,10 +146,73 @@ app.get('/expenses', function(req, res) {
 
 
 
-app.get('expenses/dates', function(req, res) {
-	Expense.findAll({
-		attributes: ['date']
-	})
+app.get('/expenses/dates', function(req, res) {
+
+    sequelize.query(
+        "SELECT *, DATE_FORMAT(expenses.date, '%Y-%m') as niceDate, " +
+        "DATE_FORMAT(expenses.date, '%Y') as year, " +
+        "DATE_FORMAT(expenses.date, '%m') as month, " +
+        "FORMAT(SUM(expenses.preTaxAmount + expenses.taxAmount), 2) as sumAmount," +
+        "COUNT(expenses.expId) as countExpense FROM `expenses`" +
+        "GROUP BY niceDate",
+        { type: sequelize.QueryTypes.SELECT})
+        //.then(users => {
+            // We don't need spread here, since only the results will be returned for select queries
+        //})
+
+    //Expense.findAll({
+        /*
+        //is not a valid attribute definition. Please use the following format: ['attribute definition', 'alias']
+        attributes: {
+            include: ['Expense.expId', [
+                sequelize.fn('COUNT', sequelize.col('Expense.expId')), 'numberOfExpenses',
+                sequelize.fn('SUM', sequelize.col('Expense.preTaxAmount')), 'totalPreTaxAmount'
+            ]]
+        },
+        group: ['Expense.expId', 'Expense.preTaxAmount']
+        */
+            /*
+            attributes: [
+                //[sequelize.fn('sum', sequelize.col('preTaxAmount')), 'totalPreTaxAmount'],
+                [sequelize.fn('COUNT', sequelize.col('Expense.preTaxAmount')), 'countPreTaxAmount'],
+                [sequelize.fn('date_format', sequelize.col('date'), '%Y-%m'), 'date']],
+            group: ['date']
+            */
+    // }).then(function(expenses) {
+    //
+    //}).then(function(expenses) {
+    .then(function(expenses) {
+        expenses.forEach( expense => {
+            // expense.preTaxAmount = expense.preTaxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 });
+            // expense.taxAmount = expense.taxAmount.toLocaleString('en-US', { minimumFractionDigits: 2 });
+        });
+        res.render('expensesDates.ejs', { expenses: expenses})
+    }).catch(function(err) {
+        // your error handling code here
+        console.error(err);
+    });
+});
+
+
+
+app.get('/expenses/dates/:year/:month', function(req, res) {
+
+    sequelize.query(
+        "SELECT *, DATE_FORMAT(expenses.date, '%Y-%m') as niceDate, " +
+        "DATE_FORMAT(expenses.date, '%Y') as year, " +
+        "DATE_FORMAT(expenses.date, '%m') as month, " +
+        "FORMAT(SUM(expenses.preTaxAmount + expenses.taxAmount), 2) as sumAmount, " +
+        "COUNT(expenses.expId) as countExpense FROM `expenses` " +
+        "GROUP BY niceDate " +
+        "HAVING year = " + req.params.year + " " +
+        "AND month = " + req.params.month,
+        { type: sequelize.QueryTypes.SELECT})
+        .then(function(expenses) {
+            res.render('expensesDates.ejs', { expenses: expenses})
+        }).catch(function(err) {
+        // your error handling code here
+        console.error(err);
+    });
 });
 
 
