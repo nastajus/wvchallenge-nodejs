@@ -26,7 +26,7 @@ router.get('/:id/expenses', (req, res) => {
 			expense.preTaxAmount = expense.preTaxAmount.toLocaleString('en-US', {minimumFractionDigits: 2});
 			expense.taxAmount = expense.taxAmount.toLocaleString('en-US', {minimumFractionDigits: 2});
 		});
-		res.render('employeeExpenses.ejs', {expenses: expenses})
+		res.render('employeesExpenses.ejs', {expenses: expenses})
 	}).catch(function (err) {
 		console.error(err);
 	});

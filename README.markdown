@@ -44,10 +44,10 @@ show landing page, with browse button
     POST /api/file
 file upload of expenses in known CSV format. redirects to `/api/employees`
 
-    GET  /api/employee
+    GET  /api/employees
 list all employees
 
-    GET  /api/employee/:empId/expenses
+    GET  /api/employees/:empId/expenses
 list all expenses for a specific employee ID
 
     GET  /api/expenses
@@ -69,10 +69,10 @@ list all expenses with matching description
 
 
 ### **considering**
-    POST /api/employee
-    POST /api/employee/:empId
-    GET  /api/employee/:empId
-    GET  /api/employee/:empId/expenses/:expId
+    POST /api/employees
+    POST /api/employees/:empId
+    GET  /api/employees/:empId
+    GET  /api/employees/:empId/expenses/:expId
 
 *NOTE: None of these are required.*
 

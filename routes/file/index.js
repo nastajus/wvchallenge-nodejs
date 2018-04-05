@@ -35,6 +35,8 @@ router.post('/', function (req, res) {
 					address: expenseFileEntry['employee address']
 				},
 				transaction: t
+			}).catch(function(err) {
+				console.error(err);
 			})
 			// necessary to use spread to find out if user was found or created
 				.spread(function(employeeResult, created){
@@ -50,7 +52,9 @@ router.post('/', function (req, res) {
 							preTaxAmount: expenseFileEntry['pre-tax amount'].replace(',', ''),
 							taxName: expenseFileEntry['tax name'],
 							taxAmount: expenseFileEntry['tax amount'].replace(',', ''),
-						}).catch(error => console.error(error))
+						}).catch(function(err) {
+							console.error(err);
+						});
 
 				}); // end spread
 		}) // end transaction
