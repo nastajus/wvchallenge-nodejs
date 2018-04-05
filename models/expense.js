@@ -28,9 +28,9 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {});
   Expense.associate = function(models) {
-	  // Expense.hasOne(models.employee, {
-		//   foreignKey: 'empId'
-	  // })
+	  Expense.hasOne(models.Employee, {
+		  foreignKey: 'empId'
+	  })
   };
   return Expense;
 };

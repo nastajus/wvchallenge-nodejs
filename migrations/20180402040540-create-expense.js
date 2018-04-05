@@ -12,7 +12,8 @@ module.exports = {
         type: Sequelize.DATE
       },
       empId: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        references: { model: 'Employees', key: 'empId' }
       },
       category: {
         type: Sequelize.STRING
