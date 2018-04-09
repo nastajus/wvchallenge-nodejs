@@ -5,22 +5,22 @@ ul {
 }
 tr.even:hover, tr.odd:hover {
     background-color: #FCB07E;  /* very light tangelo */
-    /* background-color: #7CDF64;      /*pastel green */
-    /* background-color: #DBB957;  /* sun ray */
-    cursor: pointer;
+    cursor: default;
 }
 tr.even  {
     background-color: #E9E3E6; /* platinum */
-    /* background-color: #CEB7B3;  /* dark vanilla */
     color: black;
 }
 tr.odd  {
     background-color: #D7C0D0; /* thistle */
-    /* background-color: #B1B7D1; /* pastel blue */
-    /* background-color: #B7B7B7;  /* ash grey */
     color: black;
+}
+tr>td>a>label {
+    color: black;
+    display: block;
+    cursor: pointer;
+
 }
 tr>td>a {
     text-decoration: none;
-    color: black;
 }
